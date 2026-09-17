@@ -1,0 +1,358 @@
+@use '../__colors.scss' as *;
+@use '../common' as *;
+
+.create-hotel-wrapper {
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    margin-left: 285px;
+    padding: 24px 32px 60px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: $text-main;
+    overflow-x: hidden;
+
+    // Content Area
+    .create-hotel-content {
+        max-width: 680px;
+        width: 100%;
+        background: transparent;
+        box-sizing: border-box;
+
+        .page-header {
+            margin-bottom: 24px;
+
+            .page-title {
+                font-size: 24px;
+                font-weight: 700;
+                color: $text-main;
+                letter-spacing: -0.01em;
+                margin: 0 0 6px;
+            }
+
+            .page-desc {
+                font-size: 14px;
+                color: $text-muted;
+                margin: 0;
+                line-height: 1.5;
+            }
+        }
+    }
+
+    // Form Groups
+    .form-group {
+        margin-bottom: 24px;
+        width: 100%;
+        box-sizing: border-box;
+
+        &:last-of-type {
+            margin-bottom: 30px;
+        }
+
+        .form-label-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+
+            label {
+                font-size: 14px;
+                font-weight: 600;
+                color: $text-main;
+            }
+
+            .required-star {
+                color: $danger-color;
+                font-weight: 700;
+                font-size: 15px;
+                line-height: 1;
+                margin-left: 2px;
+            }
+
+            .badge-optional {
+                @extend %badge-base;
+                background-color: #f1f5f9;
+                color: $text-muted;
+            }
+        }
+
+        .input-bottom-meta {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 6px;
+
+            .error-container {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .char-counter {
+                margin-left: auto;
+                font-size: 12px;
+                font-weight: 500;
+                color: $text-muted;
+                line-height: 1.4;
+                white-space: nowrap;
+                transition: color 0.2s ease;
+
+                &.exceeded {
+                    color: $danger-color;
+                    font-weight: 700;
+                }
+            }
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: $text-muted;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .form-control {
+            @extend %input-base;
+        }
+
+        // Custom Select
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+
+            select.form-control {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                padding-right: 40px;
+                cursor: pointer;
+            }
+
+            .select-arrow {
+                position: absolute;
+                top: 50%;
+                right: 14px;
+                transform: translateY(-50%);
+                pointer-events: none;
+                color: $text-muted;
+            }
+        }
+
+        .invalid-feedback {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: $danger-color;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+    }
+
+    // Standard File Input
+    .file-input-wrapper {
+        width: 100%;
+        box-sizing: border-box;
+
+        .file-control {
+            @extend %input-base;
+            cursor: pointer;
+            padding: 8px 12px;
+
+            &::file-selector-button {
+                margin-right: 14px;
+                background: linear-gradient(135deg, $primary-green 0%, $primary-green-hover 100%);
+                border: none;
+                color: #ffffff;
+                font-size: 13px;
+                font-weight: 600;
+                padding: 8px 16px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background: linear-gradient(135deg, $primary-green-hover 0%, $primary-green-dark 100%);
+                }
+            }
+        }
+
+        .file-hint {
+            font-size: 12px;
+            color: $text-muted;
+            margin-top: 6px;
+        }
+    }
+
+    // Preview Box
+    .image-preview-card {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 16px;
+        background-color: #ffffff;
+        border: 1px solid $green-border;
+        border-radius: 10px;
+        margin-top: 14px;
+        width: 100%;
+        box-sizing: border-box;
+
+        .preview-thumb {
+            width: 80px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+
+        .preview-details {
+            flex: 1;
+            min-width: 0;
+
+            .file-name {
+                font-size: 13px;
+                font-weight: 600;
+                color: $text-main;
+                margin-bottom: 2px;
+                word-break: break-all;
+            }
+
+            .file-size {
+                font-size: 11px;
+                color: $text-muted;
+            }
+        }
+
+        .btn-remove-image {
+            background: none;
+            border: 1px solid #cbd5e1;
+            color: $text-secondary;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+
+            &:hover {
+                background-color: #fee2e2;
+                border-color: #fca5a5;
+                color: $danger-color;
+            }
+        }
+    }
+
+    // Form Actions
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding-top: 20px;
+        border-top: 1px solid #cbd5e1;
+        margin-top: 28px;
+        width: 100%;
+        box-sizing: border-box;
+
+        .btn-submit {
+            @extend %button-submit;
+        }
+
+        .btn-cancel {
+            @extend %button-cancel;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .create-hotel-wrapper {
+        margin-left: 0 !important;
+        clear: both !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 16px !important;
+
+        .create-hotel-content {
+            max-width: 100% !important;
+            width: 100% !important;
+
+            .page-header {
+                margin-bottom: 20px;
+
+                .page-title {
+                    font-size: 20px;
+                }
+
+                .page-desc {
+                    font-size: 13px;
+                }
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+
+            .form-control {
+                font-size: 16px;
+                padding: 10px 14px;
+            }
+        }
+
+        .file-input-wrapper {
+            .file-control {
+                font-size: 13px;
+
+                &::file-selector-button {
+                    padding: 6px 12px;
+                    font-size: 12px;
+                    margin-right: 8px;
+                }
+            }
+        }
+
+        .image-preview-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+
+            .preview-thumb {
+                width: 100%;
+                max-width: 140px;
+                height: 90px;
+            }
+
+            .preview-details {
+                width: 100%;
+            }
+
+            .btn-remove-image {
+                width: 100%;
+                text-align: center;
+                padding: 8px;
+            }
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+            gap: 12px;
+            width: 100%;
+            margin-top: 24px;
+            padding-top: 16px;
+
+            .btn-submit,
+            .btn-cancel {
+                width: 100% !important;
+                padding: 12px 16px;
+                font-size: 14px;
+                box-sizing: border-box;
+            }
+        }
+    }
+}
