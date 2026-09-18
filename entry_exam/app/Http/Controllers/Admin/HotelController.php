@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CompleteEditHotelRequest;
+use App\Http\Requests\ConfirmEditHotelRequest;
 use App\Http\Requests\DeleteHotelRequest;
 use App\Http\Requests\SearchHotelNameRequest;
 use App\Http\Requests\UpsertHotelRequest;
@@ -35,7 +37,8 @@ class HotelController extends Controller
 
     public function showEdit(Request $request): View
     {
-        $hotel = $request->filled('hotel_id') ? $this->hotel->find($request->input('hotel_id')) : null;
+        $hotelId = $request->input('hotel_id');
+        $hotel = $this->hotel->findOrFail($hotelId);
         $prefectures = $this->prefecture->all();
 
         return view('admin.hotel.edit', compact('hotel', 'prefectures'));
@@ -59,9 +62,30 @@ class HotelController extends Controller
         return view('admin.hotel.result', compact('hotelList', 'prefectures'));
     }
 
-    public function edit(Request $request): void
+    public function editConfirm(ConfirmEditHotelRequest $request): View
     {
-        //
+        $hotel = $this->hotel->findOrFail($request->integer('hotel_id'));
+        $prefecture = $this->prefecture->findOrFail($request->integer('prefecture_id'));
+
+        $tempFilePath = $request->hasFile('file_path')
+            ? $this->hotelService->handleTempUploadedImage($request->file('file_path'))
+            : $request->input('temp_file_path');
+
+        $hotelName = $request->input('hotel_name');
+        $prefectureId = $request->integer('prefecture_id');
+
+        return view('admin.hotel.edit-confirm', compact('hotel', 'prefecture', 'tempFilePath', 'hotelName', 'prefectureId'));
+    }
+
+    public function editComplete(CompleteEditHotelRequest $request): View
+    {
+        $hotel = $this->hotelService->updateHotel(
+            $request->integer('hotel_id'),
+            $request->validated(),
+            $request->input('temp_file_path'),
+        );
+
+        return view('admin.hotel.edit-complete', compact('hotel'));
     }
 
     public function create(UpsertHotelRequest $request): RedirectResponse

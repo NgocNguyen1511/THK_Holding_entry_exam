@@ -20,20 +20,11 @@ class Hotel extends Model
      */
     protected $guarded = ['hotel_id'];
 
-    /**
-     * @return BelongsTo
-     */
     public function prefecture(): BelongsTo
     {
         return $this->belongsTo(Prefecture::class, 'prefecture_id', 'prefecture_id');
     }
 
-    /**
-     * @param Builder $query
-     * @param string|null $hotelName
-     * @param int|null $prefectureId
-     * @return Builder
-     */
     public function scopeSearch(Builder $query, ?string $hotelName = null, ?int $prefectureId = null): Builder
     {
         return $query->with('prefecture')
@@ -45,20 +36,11 @@ class Hotel extends Model
             });
     }
 
-    /**
-     * @param string|null $hotelName
-     * @param int|null $prefectureId
-     * @return Collection
-     */
     public function getHotelList(?string $hotelName = null, ?int $prefectureId = null): Collection
     {
         return $this->search($hotelName, $prefectureId)->get();
     }
 
-    /**
-     * @param string $hotelName
-     * @return Collection
-     */
     public static function getHotelListByName(string $hotelName): Collection
     {
         return static::where('hotel_name', 'LIKE', '%'.addcslashes($hotelName, '%_').'%')

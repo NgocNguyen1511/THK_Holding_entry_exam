@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
 use App\Models\Hotel;
 use App\Models\Prefecture;
+use Illuminate\View\View;
 
 class HotelController extends Controller
 {
     protected $hotel;
+
     protected $prefecture;
 
     public function __construct(
         Hotel $hotel,
         Prefecture $prefecture
-    )
-    {
+    ) {
         $this->hotel = $hotel;
         $this->prefecture = $prefecture;
     }
@@ -32,7 +32,6 @@ class HotelController extends Controller
             ->where('prefecture_id', $prefectures->prefecture_id)
             ->inRandomOrder()
             ->get();
-
 
         return view('user.hotellist', compact(
             'prefectures',
