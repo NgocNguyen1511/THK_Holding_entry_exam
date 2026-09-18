@@ -45,7 +45,7 @@
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="{{ route('adminHotelDeleteProcess') }}" method="post">
+                                    <form action="{{ route('adminHotelDeleteProcess') }}" method="post" onsubmit="return confirm('本当にこのホテル情報を削除しますか？\n(Are you sure you want to delete this hotel?)');">
                                         @csrf
                                         <input type="hidden" name="hotel_id" value="{{ $hotel['hotel_id'] }}">
                                         <button type="submit">削除</button>
