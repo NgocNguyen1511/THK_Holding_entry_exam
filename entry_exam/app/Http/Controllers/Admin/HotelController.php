@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use App\Models\Hotel;
 
@@ -64,8 +65,27 @@ class HotelController extends Controller
         //
     }
 
-    public function delete(Request $request): void
+    public function delete(Request $request): RedirectResponse
     {
-        //
+        $request->validate([
+            'hotel_id' => ['required', 'integer', 'exists:hotels,hotel_id'],
+        ]);
+
+        $hotelId = $request->input('hotel_id');
+        $hotel = Hotel::find($hotelId);
+
+        if ($hotel) {
+            if ($hotel->file_path) {
+                $imageFullPath = public_path('assets/img/' . $hotel->file_path);
+                if (file_exists($imageFullPath)) {
+                    @unlink($imageFullPath);
+                }
+            }
+
+            $hotel->delete();
+        }
+
+        return redirect()
+            ->back();
     }
 }
