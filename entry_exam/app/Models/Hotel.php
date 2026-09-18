@@ -33,7 +33,7 @@ class Hotel extends Model
      */
     static public function getHotelListByName(string $hotelName): array
     {
-        $result = Hotel::where('hotel_name', '=', $hotelName)
+        $result = Hotel::where('hotel_name', 'LIKE', '%' . $hotelName . '%')
             ->with('prefecture')
             ->get()
             ->toArray();
