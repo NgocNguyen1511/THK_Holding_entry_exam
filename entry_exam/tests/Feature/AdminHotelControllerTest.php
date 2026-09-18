@@ -73,6 +73,8 @@ class AdminHotelControllerTest extends TestCase
         $response->assertViewHas('hotelList', function ($hotelList) {
             return $hotelList->count() === 1 && $hotelList->first()->hotel_name === 'Tokyo Grand Hotel';
         });
+        $hotel = Hotel::where('hotel_name', 'Tokyo Grand Hotel')->first();
+        $response->assertSee(route('hotelDetail', ['hotel_id' => $hotel->hotel_id]));
     }
 
     public function testCreateHotelStoresRecordAndRedirects(): void

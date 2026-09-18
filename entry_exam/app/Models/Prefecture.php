@@ -17,9 +17,6 @@ class Prefecture extends Model
      */
     protected $guarded = ['prefecture_id'];
 
-    /**
-     * @return HasMany
-     */
     public function hotel(): HasMany
     {
         return $this->hasMany(Hotel::class);

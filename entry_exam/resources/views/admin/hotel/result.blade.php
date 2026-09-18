@@ -26,7 +26,7 @@
                         @foreach($hotelList as $hotel)
                             <tr style="background-color:#BDF1FF">
                                 <td>
-                                    <a href="" target="_blank">{{ $hotel['hotel_name'] }}</a>
+                                    <a href="{{ route('hotelDetail', ['hotel_id' => $hotel['hotel_id']]) }}" target="_blank">{{ $hotel['hotel_name'] }}</a>
                                 </td>
                                 <td>
                                     {{ $hotel['prefecture']['prefecture_name'] }}
