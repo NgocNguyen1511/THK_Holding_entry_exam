@@ -41,6 +41,8 @@
                                     <form action="{{ route('adminHotelEditPage') }}" method="get">
                                         @csrf
                                         <input type="hidden" name="hotel_id" value="{{ $hotel['hotel_id'] }}">
+                                        <input type="hidden" name="search_hotel_name" value="{{ request('hotel_name') }}">
+                                        <input type="hidden" name="search_prefecture_id" value="{{ request('prefecture_id') }}">
                                         <button type="submit">編集</button>
                                     </form>
                                 </td>
