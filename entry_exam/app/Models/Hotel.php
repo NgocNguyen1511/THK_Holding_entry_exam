@@ -31,7 +31,7 @@ class Hotel extends Model
      * @param string $hotelName
      * @return array
      */
-    static public function getHotelListByName(string $hotelName): array
+    public static function getHotelListByName(string $hotelName): array
     {
         $result = Hotel::where('hotel_name', 'LIKE', '%' . $hotelName . '%')
             ->with('prefecture')
@@ -39,6 +39,19 @@ class Hotel extends Model
             ->toArray();
 
         return $result;
+    }
+
+    public static function getHotelList(?string $hotelName, ?int $prefectureId): array
+    {
+        return self::with('prefecture')
+            ->when($hotelName, function ($query, $name) {
+                $query->where('hotel_name', 'LIKE', '%' . addcslashes($name, '%_') . '%');
+            })
+            ->when($prefectureId, function ($query, $prefId) {
+                $query->where('prefecture_id', $prefId);
+            })
+            ->get()
+            ->toArray();
     }
 
     /**

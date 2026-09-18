@@ -15,7 +15,13 @@
         <div class="search-hotel-name">
             <form action="{{ route('adminHotelSearchResult') }}" method="get">
                 @csrf
-                <input type="text" name="hotel_name" value="" placeholder="ホテル名">
+                <input type="text" name="hotel_name" value="{{ request('hotel_name') }}" placeholder="ホテル名">
+                <select name="prefecture_id">
+                    <option value="">全て(All)</option>
+                    @foreach($prefectures ?? [] as $prefecture)
+                        <option value="{{ $prefecture->prefecture_id }}" {{ request('prefecture_id') == $prefecture->prefecture_id ? 'selected' : '' }}>{{ $prefecture->prefecture_name }} ({{ ucwords($prefecture->prefecture_name_alpha) }})</option>
+                    @endforeach
+                </select>
                 <button type="submit">検索</button>
                 @error('hotel_name')
                     <p style="color: red; margin-top: 4px;">{{ $message }}</p>
