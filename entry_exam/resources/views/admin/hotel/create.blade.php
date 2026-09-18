@@ -51,7 +51,7 @@
                         accept="image/jpeg,image/png,image/jpg,image/webp">
                     <div class="file-hint">Supported formats: JPEG, PNG, JPG, WEBP (Max 2MB)</div>
                 </div>
-                @error('file')
+                @error('file_path')
                     <p style="color: red; margin-top: 4px;">{{ $message }}</p>
                 @enderror
             </div>
