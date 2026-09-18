@@ -35,6 +35,15 @@ class HotelController extends Controller
 
     public function searchResult(Request $request): View
     {
+        $request->validate(
+            [
+                'hotel_name' => 'required',
+            ],
+            [
+                'hotel_name.required' => '何も入力されていません',
+            ],
+        );
+
         $var = [];
 
         $hotelNameToSearch = $request->input('hotel_name');
