@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use App\Models\Hotel;
+use App\Models\Prefecture;
 
 class HotelController extends Controller
 {
@@ -14,7 +15,8 @@ class HotelController extends Controller
 
     public function showSearch(): View
     {
-        return view('admin.hotel.search');
+        $prefectures = Prefecture::all();
+        return view('admin.hotel.search', compact('prefectures'));
     }
 
     public function showResult(): View
@@ -48,9 +50,11 @@ class HotelController extends Controller
         $var = [];
 
         $hotelNameToSearch = $request->input('hotel_name');
-        $hotelList = Hotel::getHotelListByName($hotelNameToSearch);
+        $prefectureIdToFilter = $request->input('prefecture_id');
+        $hotelList = Hotel::getHotelList($hotelNameToSearch, $prefectureIdToFilter);
 
         $var['hotelList'] = $hotelList;
+        $var['prefectures'] = Prefecture::all();
 
         return view('admin.hotel.result', $var);
     }
