@@ -3,19 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use App\Http\Requests\DeleteHotelRequest;
+use App\Http\Requests\SearchHotelNameRequest;
+use App\Http\Requests\UpsertHotelRequest;
 use App\Models\Hotel;
 use App\Models\Prefecture;
+use App\Services\HotelService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class HotelController extends Controller
 {
-    /** get methods */
+    public function __construct(
+        private HotelService $hotelService,
+        private Hotel $hotel,
+        private Prefecture $prefecture,
+    ) {}
 
     public function showSearch(): View
     {
-        $prefectures = Prefecture::all();
+        $prefectures = $this->prefecture->all();
+
         return view('admin.hotel.search', compact('prefectures'));
     }
 
@@ -24,40 +33,30 @@ class HotelController extends Controller
         return view('admin.hotel.result');
     }
 
-    public function showEdit(): View
+    public function showEdit(Request $request): View
     {
-        return view('admin.hotel.edit');
+        $hotel = $request->filled('hotel_id') ? $this->hotel->find($request->input('hotel_id')) : null;
+        $prefectures = $this->prefecture->all();
+
+        return view('admin.hotel.edit', compact('hotel', 'prefectures'));
     }
 
     public function showCreate(): View
     {
-        $prefectures = Prefecture::all();
+        $prefectures = $this->prefecture->all();
+
         return view('admin.hotel.create', compact('prefectures'));
     }
 
-    /** post methods */
-
-    public function searchResult(Request $request): View
+    public function searchResult(SearchHotelNameRequest $request): View
     {
-        $request->validate(
-            [
-                'hotel_name' => 'required',
-            ],
-            [
-                'hotel_name.required' => '何も入力されていません',
-            ],
+        $hotelList = $this->hotelService->searchHotels(
+            $request->input('hotel_name'),
+            $request->integer('prefecture_id') ?: null,
         );
+        $prefectures = $this->prefecture->all();
 
-        $var = [];
-
-        $hotelNameToSearch = $request->input('hotel_name');
-        $prefectureIdToFilter = $request->input('prefecture_id');
-        $hotelList = Hotel::getHotelList($hotelNameToSearch, $prefectureIdToFilter);
-
-        $var['hotelList'] = $hotelList;
-        $var['prefectures'] = Prefecture::all();
-
-        return view('admin.hotel.result', $var);
+        return view('admin.hotel.result', compact('hotelList', 'prefectures'));
     }
 
     public function edit(Request $request): void
@@ -65,72 +64,22 @@ class HotelController extends Controller
         //
     }
 
-    public function create(Request $request): RedirectResponse
+    public function create(UpsertHotelRequest $request): RedirectResponse
     {
-        $request->validate(
-            [
-                'hotel_name' => ['required', 'string', 'max:255'],
-                'prefecture_id' => ['required', 'integer', 'exists:prefectures,prefecture_id'],
-                'file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            ],
-            [
-                'hotel_name.required' => 'Hotel name is required.',
-                'hotel_name.max' => 'Hotel name must not exceed 255 characters.',
-                'prefecture_id.required' => 'Prefecture is required.',
-                'prefecture_id.exists' => 'Selected prefecture does not exist.',
-                'file.image' => 'Uploaded file must be an image.',
-                'file.mimes' => 'Image file must be in jpg, jpeg, png, or webp format.',
-                'file.max' => 'Image file size must be less than 2MB.',
-            ],
+        $this->hotelService->createHotel(
+            $request->validated(),
+            $request->file('file_path'),
         );
-
-        $filePath = '';
-
-        if ($request->hasFile('file_path')) {
-            $file = $request->file('file_path');
-            $fileName = $request->getSchemeAndHttpHost() . 'assets/img/hotel/' . time() . '_' . $file->getClientOriginalName();
-            $targetDir = public_path('assets/img/hotel');
-
-            if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0755, true);
-            }
-
-            $file->move($targetDir, $fileName);
-            $filePath = 'hotel/' . $fileName;
-        }
-
-        Hotel::create([
-            'hotel_name' => $request->input('hotel_name'),
-            'prefecture_id' => $request->input('prefecture_id'),
-            'file_path' => $filePath,
-        ]);
 
         return redirect()
             ->route('adminHotelCreatePage')
-            ->with('success', 'ホテルを作成しました。(Hotel created successfully)');
+            ->with('success', __('hotel.created_success'));
     }
 
-    public function delete(Request $request): RedirectResponse
+    public function delete(DeleteHotelRequest $request): RedirectResponse
     {
-        $request->validate([
-            'hotel_id' => ['required', 'integer', 'exists:hotels,hotel_id'],
-        ]);
+        $this->hotelService->deleteHotel($request->integer('hotel_id'));
 
-        $hotelId = $request->input('hotel_id');
-        $hotel = Hotel::find($hotelId);
-
-        if ($hotel) {
-            if ($hotel->file_path) {
-                $imageFullPath = public_path('assets/img/' . $hotel->file_path);
-                if (file_exists($imageFullPath)) {
-                    @unlink($imageFullPath);
-                }
-            }
-
-            $hotel->delete();
-        }
-
-        return redirect()
-            ->back();
+        return back();
     }
 }

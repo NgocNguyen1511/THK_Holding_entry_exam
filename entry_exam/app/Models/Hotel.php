@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -26,41 +29,44 @@ class Hotel extends Model
     }
 
     /**
-     * Search hotel by hotel name
-     *
-     * @param string $hotelName
-     * @return array
+     * @param Builder $query
+     * @param string|null $hotelName
+     * @param int|null $prefectureId
+     * @return Builder
      */
-    public static function getHotelListByName(string $hotelName): array
+    public function scopeSearch(Builder $query, ?string $hotelName = null, ?int $prefectureId = null): Builder
     {
-        $result = Hotel::where('hotel_name', 'LIKE', '%' . $hotelName . '%')
-            ->with('prefecture')
-            ->get()
-            ->toArray();
-
-        return $result;
-    }
-
-    public static function getHotelList(?string $hotelName, ?int $prefectureId): array
-    {
-        return self::with('prefecture')
-            ->when($hotelName, function ($query, $name) {
-                $query->where('hotel_name', 'LIKE', '%' . addcslashes($name, '%_') . '%');
+        return $query->with('prefecture')
+            ->when($hotelName, function (Builder $q, string $name): void {
+                $q->where('hotel_name', 'LIKE', '%'.addcslashes($name, '%_').'%');
             })
-            ->when($prefectureId, function ($query, $prefId) {
-                $query->where('prefecture_id', $prefId);
-            })
-            ->get()
-            ->toArray();
+            ->when($prefectureId, function (Builder $q, int $prefId): void {
+                $q->where('prefecture_id', $prefId);
+            });
     }
 
     /**
-     * Override serializeDate method to customize date format
-     *
-     * @param  \DateTimeInterface  $date
-     * @return string
+     * @param string|null $hotelName
+     * @param int|null $prefectureId
+     * @return Collection
      */
-    protected function serializeDate(\DateTimeInterface $date)
+    public function getHotelList(?string $hotelName = null, ?int $prefectureId = null): Collection
+    {
+        return $this->search($hotelName, $prefectureId)->get();
+    }
+
+    /**
+     * @param string $hotelName
+     * @return Collection
+     */
+    public static function getHotelListByName(string $hotelName): Collection
+    {
+        return static::where('hotel_name', 'LIKE', '%'.addcslashes($hotelName, '%_').'%')
+            ->with('prefecture')
+            ->get();
+    }
+
+    protected function serializeDate(DateTimeInterface $date): string
     {
         return $date->format('Y-m-d H:i:s');
     }

@@ -4,7 +4,7 @@
     <div class="page-wrapper search-page-wrapper">
         <div class="search-result">
             <h3 class="search-result-title">検索結果</h3>
-            @if (!empty($hotelList))
+            @if (count($hotelList) > 0)
                 <table class="shopsearchlist_table">
                     <tbody>
                         <tr>
