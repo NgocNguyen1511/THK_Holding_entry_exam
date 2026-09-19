@@ -51,3 +51,32 @@ button {
     color: #666;
     margin-top: 4px;
 }
+
+@media (max-width: 768px) {
+    h1.title {
+        padding: 0 16px;
+        box-sizing: border-box;
+    }
+
+    form {
+        width: 100%;
+
+        input:not([type="hidden"]),
+        select,
+        textarea {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        input[type="file"] {
+            width: 174px;
+        }
+    }
+
+    .search-hotel-name {
+        padding-left: 16px;
+        padding-right: 16px;
+        box-sizing: border-box;
+    }
+}

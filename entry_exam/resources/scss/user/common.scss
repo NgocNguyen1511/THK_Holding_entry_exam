@@ -24,3 +24,33 @@
     min-height: 105vh;
     padding: 30px 100px;
 }
+
+@media (max-width: 768px) {
+    .g-header {
+        padding: 12px 20px 10px;
+
+        a {
+            font-size: 28px;
+            line-height: 1.2;
+            display: inline-block;
+        }
+    }
+
+    .container {
+        padding: 20px;
+        min-height: 100vh;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 480px) {
+    .g-header {
+        a {
+            font-size: 24px;
+        }
+    }
+
+    .container {
+        padding: 14px;
+    }
+}

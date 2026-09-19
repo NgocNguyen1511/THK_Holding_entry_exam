@@ -19,6 +19,14 @@
             margin: 25px 0;
             display: flex;
         }
+        .left_wrapper {
+            flex: 0 0 auto;
+
+            img {
+                max-width: 260px;
+                height: auto;
+            }
+        }
         .right_wrapper{
             padding: 0 0 0 35px;
         }
@@ -28,6 +36,47 @@
             }
             .hotel_title{
                 color: #8d6e63;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        .hotellist_container {
+            padding: 24px 20px;
+
+            .hotel_title {
+                font-size: 28px;
+                line-height: 1.4;
+            }
+
+            .hotellist_wrapper {
+                flex-direction: column;
+                padding: 16px;
+            }
+
+            .left_wrapper {
+                img {
+                    width: 100%;
+                    max-width: 100%;
+                }
+            }
+
+            .right_wrapper {
+                padding: 16px 0 0;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        .hotellist_container {
+            padding: 16px 14px;
+
+            .hotel_title {
+                font-size: 24px;
             }
         }
     }

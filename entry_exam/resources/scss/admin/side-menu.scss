@@ -33,3 +33,39 @@
         text-decoration: underline;
     }
 }
+
+@media (max-width: 768px) {
+    .admin-menu {
+        width: 100%;
+        height: auto;
+        float: none;
+        border-right: 0;
+        border-bottom: solid 1px #808080;
+        box-sizing: border-box;
+    }
+
+    .menu-block {
+        width: auto;
+        height: auto;
+        min-height: 0;
+        display: block;
+        box-sizing: border-box;
+
+        h3.title {
+            margin-bottom: 16px;
+        }
+
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin: 0;
+        }
+    }
+}
