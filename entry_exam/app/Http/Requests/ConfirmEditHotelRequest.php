@@ -18,7 +18,7 @@ class ConfirmEditHotelRequest extends FormRequest
             'hotel_name' => ['required', 'string', 'max:255'],
             'prefecture_id' => ['required', 'integer', 'exists:prefectures,prefecture_id'],
             'file_path' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'temp_file_path' => ['nullable', 'string'],
+            'new_file_path' => ['nullable', 'string'],
         ];
     }
 

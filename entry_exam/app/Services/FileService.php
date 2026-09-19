@@ -24,32 +24,6 @@ class FileService
         return $directory.'/'.$fileName;
     }
 
-    public function handleTempUploadedImage(?UploadedFile $file): ?string
-    {
-        return $this->handleUploadedImage($file, 'hotel/temp');
-    }
-
-    public function promoteTempImage(string $tempFilePath, string $destinationDir = 'hotel'): ?string
-    {
-        $sourceFullPath = public_path('assets/img/'.$tempFilePath);
-
-        if (! file_exists($sourceFullPath)) {
-            return null;
-        }
-
-        $fileName = basename($tempFilePath);
-        $targetDir = public_path('assets/img/'.$destinationDir);
-
-        if (! file_exists($targetDir)) {
-            mkdir($targetDir, 0755, true);
-        }
-
-        $targetFullPath = $targetDir.'/'.$fileName;
-        rename($sourceFullPath, $targetFullPath);
-
-        return $destinationDir.'/'.$fileName;
-    }
-
     public function deleteImage(?string $filePath): void
     {
         if (! $filePath) {
