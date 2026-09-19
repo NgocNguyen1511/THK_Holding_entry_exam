@@ -82,7 +82,7 @@
                 </div>
 
                 <div style="margin-top: 16px; display: flex; gap: 12px;">
-                    <a href="{{ route('adminHotelSearchResult', ['hotel_name' => $hotel->hotel_name]) }}">キャンセル</a>
+                    <button onclick="location.href='{{ route('adminHotelSearchResult', ['hotel_name' => $hotel->hotel_name]) }}'">キャンセル</button>
                     <button type="submit">確認画面へ</button>
                 </div>
             </form>

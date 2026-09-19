@@ -23,12 +23,6 @@
                             <td nowrap="" id="checkout_time">
                                 チェックアウト日時
                             </td>
-                            <td nowrap="" id="created_at">
-                                予約日時
-                            </td>
-                            <td nowrap="" id="updated_at">
-                                情報更新日時
-                            </td>
                         </tr>
                         @foreach ($bookings as $booking)
                             <tr style="background-color:#BDF1FF">
@@ -46,12 +40,6 @@
                                 </td>
                                 <td nowrap="">
                                     {{ $booking->checkout_time ? (string) $booking->checkout_time : '-' }}
-                                </td>
-                                <td nowrap="">
-                                    {{ (string) $booking->created_at }}
-                                </td>
-                                <td nowrap="">
-                                    {{ (string) $booking->updated_at }}
                                 </td>
                             </tr>
                         @endforeach
