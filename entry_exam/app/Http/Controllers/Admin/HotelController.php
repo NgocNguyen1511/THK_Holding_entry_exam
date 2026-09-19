@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompleteEditHotelRequest;
 use App\Http\Requests\ConfirmEditHotelRequest;
-use App\Http\Requests\DeleteHotelRequest;
 use App\Http\Requests\SearchHotelNameRequest;
 use App\Http\Requests\UpsertHotelRequest;
 use App\Models\Hotel;
@@ -107,7 +106,7 @@ class HotelController extends Controller
             ->with('success', __('hotel.created_success'));
     }
 
-    public function delete(DeleteHotelRequest $request): RedirectResponse
+    public function delete(Request $request): RedirectResponse
     {
         $this->hotelService->deleteHotel($request->integer('hotel_id'));
 
