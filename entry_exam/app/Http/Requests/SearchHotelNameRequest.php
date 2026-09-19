@@ -14,8 +14,14 @@ class SearchHotelNameRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'hotel_name' => ['nullable', 'string', 'max:255'],
-            'prefecture_id' => ['nullable', 'integer', 'exists:prefectures,prefecture_id'],
+            'hotel_name' => ['required'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'hotel_name.required' => __('何も入力されていません'),
         ];
     }
 }

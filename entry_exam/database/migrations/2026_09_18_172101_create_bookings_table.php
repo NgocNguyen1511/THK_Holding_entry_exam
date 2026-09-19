@@ -13,8 +13,8 @@ return new class extends Migration
             $table->unsignedBigInteger('hotel_id')->comment('foreign key to hotels');
             $table->string('customer_name', 255)->comment('customer name');
             $table->string('customer_contact', 255)->comment('customer contact information');
-            $table->timestamp('checkin_time')->nullable()->comment('check-in time');
-            $table->timestamp('checkout_time')->nullable()->comment('check-out time');
+            $table->timestamp('checkin_time')->comment('check-in time');
+            $table->timestamp('checkout_time')->comment('check-out time');
             $table->timestamps();
 
             $table->foreign('hotel_id')->references('hotel_id')->on('hotels')->cascadeOnDelete();

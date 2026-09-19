@@ -65,6 +65,7 @@ class BookingSeeder extends Seeder
             ],
         ];
 
+        // INSERT HOTEL ID FOR EACH BOOKING
         foreach ($sampleBookings as $index => $booking) {
             $hotel = $hotels->get($index % $hotels->count());
             $booking['hotel_id'] = $hotel->hotel_id;
