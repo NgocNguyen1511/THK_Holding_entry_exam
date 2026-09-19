@@ -8,6 +8,8 @@
     img{
         margin: auto;
         display: block;
+        max-width: 100%;
+        height: auto;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
     }
     .hotel_title{
@@ -19,5 +21,31 @@
         text-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
         line-height: 60px;
         padding: 40px 0 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        .hotedetail_container {
+            padding: 28px 20px;
+        }
+
+        .hotel_title {
+            font-size: 28px;
+            line-height: 1.4;
+            padding: 28px 0 16px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        .hotedetail_container {
+            padding: 20px 14px;
+        }
+
+        .hotel_title {
+            font-size: 24px;
+        }
     }
 }

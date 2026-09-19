@@ -36,3 +36,47 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+    .container {
+        .text,
+        .area {
+            font-size: 18px;
+        }
+
+        .pref {
+            display: inline-block;
+            font-size: 16px;
+            line-height: 1.9;
+        }
+
+        .prefecture_container {
+            padding: 18px 20px 32px;
+
+            .area_container {
+                flex-direction: column;
+
+                .side-wrapper {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        .text,
+        .area {
+            font-size: 16px;
+        }
+
+        .pref {
+            font-size: 15px;
+        }
+
+        .prefecture_container {
+            padding: 14px 16px 24px;
+        }
+    }
+}

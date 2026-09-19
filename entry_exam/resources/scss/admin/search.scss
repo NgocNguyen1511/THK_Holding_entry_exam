@@ -10,3 +10,42 @@
         gap: 4px;
     }
 }
+
+.search-hotel-name {
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    input,
+    select,
+    button {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 768px) {
+    h2.title,
+    .search-hotel-name {
+        padding-left: 16px;
+        padding-right: 16px;
+        box-sizing: border-box;
+    }
+
+    .search-hotel-name {
+        form,
+        .booking-search-form {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+        }
+    }
+}
