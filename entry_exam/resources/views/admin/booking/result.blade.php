@@ -4,7 +4,7 @@
     <div class="page-wrapper search-page-wrapper">
         <div class="search-result">
             <h3 class="search-result-title">検索結果</h3>
-            @if (count($bookings ?? []) > 0)
+            @if (!empty($bookings))
                 <table class="shopsearchlist_table">
                     <tbody>
                         <tr>
@@ -33,25 +33,25 @@
                         @foreach ($bookings as $booking)
                             <tr style="background-color:#BDF1FF">
                                 <td>
-                                    {{ $booking->customer_name }}
+                                    {{ $booking['customer_name'] }}
                                 </td>
                                 <td>
-                                    {{ $booking->customer_contact }}
+                                    {{ $booking['customer_contact'] }}
                                 </td>
                                 <td>
-                                    {{ $booking->hotel->hotel_name ?? '-' }}
+                                    {{ $booking['hotel']['hotel_name'] ?? '-' }}
                                 </td>
                                 <td nowrap="">
-                                    {{ $booking->checkin_time ? (string) $booking->checkin_time : '-' }}
+                                    {{ $booking['checkin_time'] ? (string) $booking['checkin_time'] : '-' }}
                                 </td>
                                 <td nowrap="">
-                                    {{ $booking->checkout_time ? (string) $booking->checkout_time : '-' }}
+                                    {{ $booking['checkout_time'] ? (string) $booking['checkout_time'] : '-' }}
                                 </td>
                                 <td nowrap="">
-                                    {{ $booking->created_at ? (string) $booking->created_at : '-' }}
+                                    {{ $booking['created_at'] ? (string) $booking['created_at'] : '-' }}
                                 </td>
                                 <td nowrap="">
-                                    {{ $booking->updated_at ? (string) $booking->updated_at : '-' }}
+                                    {{ $booking['updated_at'] ? (string) $booking['updated_at'] : '-' }}
                                 </td>
                             </tr>
                         @endforeach

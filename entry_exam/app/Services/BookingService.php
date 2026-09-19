@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Booking;
-use Illuminate\Database\Eloquent\Collection;
 
 class BookingService
 {
@@ -16,7 +15,7 @@ class BookingService
         ?string $customerContact = null,
         ?string $checkinTime = null,
         ?string $checkoutTime = null
-    ): Collection {
+    ): array {
         return $this->booking->getBookingList(
             $customerName,
             $customerContact,
