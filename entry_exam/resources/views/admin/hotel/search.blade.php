@@ -17,7 +17,7 @@
                 @csrf
                 <input type="text" name="hotel_name" value="{{ request('hotel_name') }}" placeholder="ホテル名">
                 <select name="prefecture_id">
-                    <option value="">全て(All)</option>
+                    <option value="">全て</option>
                     @foreach($prefectures ?? [] as $prefecture)
                         <option value="{{ $prefecture->prefecture_id }}" {{ request('prefecture_id') == $prefecture->prefecture_id ? 'selected' : '' }}>{{ $prefecture->prefecture_name }} ({{ ucwords($prefecture->prefecture_name_alpha) }})</option>
                     @endforeach

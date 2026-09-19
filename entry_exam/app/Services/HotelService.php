@@ -62,7 +62,7 @@ class HotelService
         return (bool) $hotel->delete();
     }
 
-    public function searchHotels(?string $hotelName = null, ?int $prefectureId = null): Collection
+    public function searchHotels(?string $hotelName = null, ?int $prefectureId = null): array
     {
         return $this->hotel->getHotelList($hotelName, $prefectureId);
     }
