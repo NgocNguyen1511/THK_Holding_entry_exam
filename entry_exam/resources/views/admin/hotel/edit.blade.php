@@ -10,10 +10,14 @@
         <hr>
 
         <div class="search-hotel-name">
+            @php
+                $newFilePath = old('new_file_path', request('new_file_path'));
+            @endphp
+
             <form action="{{ route('adminHotelEditConfirm') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="hotel_id" value="{{ $hotel->hotel_id }}">
-                <input type="hidden" name="temp_file_path" value="{{ old('temp_file_path', request('temp_file_path')) }}">
+                <input type="hidden" name="new_file_path" value="{{ $newFilePath }}">
 
                 {{-- Hotel name input --}}
                 <div>
@@ -49,12 +53,11 @@
                         <span class="optional-badge">Optional</span>
                     </div>
 
-                    @if (request('temp_file_path') && file_exists(public_path('assets/img/' . request('temp_file_path'))))
+                    {{-- Image preview --}}
+                    @if ($newFilePath && file_exists(public_path('assets/img/' . $newFilePath)))
                         <div style="margin: 8px 0;">
-                            <img src="{{ asset('assets/img/' . request('temp_file_path')) }}"
-                                alt="Temporary Uploaded Image"
+                            <img src="{{ asset('assets/img/' . $newFilePath) }}" alt="Selected Hotel Image"
                                 style="max-width: 200px; max-height: 150px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-                            <div style="font-size: 12px; color: #555; margin-top: 4px;">※ アップロード済みの新しい画像</div>
                         </div>
                     @elseif ($hotel->file_path && file_exists(public_path('assets/img/' . $hotel->file_path)))
                         <div style="margin: 8px 0;">
@@ -68,6 +71,9 @@
                         <input type="file" id="file_path" name="file_path"
                             class="form-control file-control @error('file_path') is-invalid @enderror"
                             accept="image/jpeg,image/png,image/jpg,image/webp">
+                        @if ($newFilePath)
+                            <div style="font-size: 12px; color: #555; margin-top: 4px;">選択済み: {{ basename($newFilePath) }}</div>
+                        @endif
                         <div class="file-hint">対応フォーマット：JPEG、PNG、JPG、WEBP（最大2MB）</div>
                     </div>
                     @error('file_path')
@@ -76,7 +82,7 @@
                 </div>
 
                 <div style="margin-top: 16px; display: flex; gap: 12px;">
-                    <a href="{{ route('adminHotelSearchResult', ['hotel_name' => $hotel->hotel_name]) }}">キャンセル</a>
+                    <button onclick="location.href='{{ route('adminHotelSearchResult', ['hotel_name' => $hotel->hotel_name]) }}'">キャンセル</button>
                     <button type="submit">確認画面へ</button>
                 </div>
             </form>

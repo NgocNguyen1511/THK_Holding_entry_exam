@@ -48,10 +48,10 @@
                                     {{ $booking->checkout_time ? (string) $booking->checkout_time : '-' }}
                                 </td>
                                 <td nowrap="">
-                                    {{ (string) $booking->created_at }}
+                                    {{ $booking->created_at ? (string) $booking->created_at : '-' }}
                                 </td>
                                 <td nowrap="">
-                                    {{ (string) $booking->updated_at }}
+                                    {{ $booking->updated_at ? (string) $booking->updated_at : '-' }}
                                 </td>
                             </tr>
                         @endforeach

@@ -42,8 +42,7 @@
             </table>
 
             <div style="margin-top: 16px; display: flex; gap: 15px;">
-                <a href="{{ route('adminHotelSearchResult', ['hotel_name' => $hotel->hotel_name]) }}">検索結果に戻る</a>
-                <a href="{{ route('adminHotelEditPage', ['hotel_id' => $hotel->hotel_id]) }}">再度編集する</a>
+                <button onclick="location.href='{{ route('adminHotelSearchPage') }}'">検索ページに戻る</button>
             </div>
         </div>
     </div>

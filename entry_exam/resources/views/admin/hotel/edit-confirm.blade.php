@@ -33,9 +33,9 @@
                             ホテルイメージ
                         </td>
                         <td>
-                            @if ($tempFilePath && file_exists(public_path('assets/img/' . $tempFilePath)))
+                            @if ($newFilePath && file_exists(public_path('assets/img/' . $newFilePath)))
                                 <div>
-                                    <img src="{{ asset('assets/img/' . $tempFilePath) }}" alt="New Hotel Image"
+                                    <img src="{{ asset('assets/img/' . $newFilePath) }}" alt="New Hotel Image"
                                         style="max-width: 200px; max-height: 150px; display: block; margin-bottom: 4px;">
                                     <span>※ 新しい画像</span>
                                 </div>
@@ -59,7 +59,7 @@
                     <input type="hidden" name="hotel_id" value="{{ $hotel->hotel_id }}">
                     <input type="hidden" name="hotel_name" value="{{ $hotelName }}">
                     <input type="hidden" name="prefecture_id" value="{{ $prefectureId }}">
-                    <input type="hidden" name="temp_file_path" value="{{ $tempFilePath }}">
+                    <input type="hidden" name="new_file_path" value="{{ $newFilePath }}">
                     <button type="submit">戻る</button>
                 </form>
 
@@ -68,7 +68,7 @@
                     <input type="hidden" name="hotel_id" value="{{ $hotel->hotel_id }}">
                     <input type="hidden" name="hotel_name" value="{{ $hotelName }}">
                     <input type="hidden" name="prefecture_id" value="{{ $prefectureId }}">
-                    <input type="hidden" name="temp_file_path" value="{{ $tempFilePath }}">
+                    <input type="hidden" name="new_file_path" value="{{ $newFilePath }}">
                     <button type="submit">更新する</button>
                 </form>
             </div>

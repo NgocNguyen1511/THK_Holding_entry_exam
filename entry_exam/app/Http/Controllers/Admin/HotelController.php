@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompleteEditHotelRequest;
 use App\Http\Requests\ConfirmEditHotelRequest;
-use App\Http\Requests\DeleteHotelRequest;
 use App\Http\Requests\SearchHotelNameRequest;
 use App\Http\Requests\UpsertHotelRequest;
 use App\Models\Hotel;
 use App\Models\Prefecture;
+use App\Services\FileService;
 use App\Services\HotelService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,6 +19,7 @@ class HotelController extends Controller
 {
     public function __construct(
         private HotelService $hotelService,
+        private FileService $fileService,
         private Hotel $hotel,
         private Prefecture $prefecture,
     ) {}
@@ -67,14 +68,19 @@ class HotelController extends Controller
         $hotel = $this->hotel->findOrFail($request->integer('hotel_id'));
         $prefecture = $this->prefecture->findOrFail($request->integer('prefecture_id'));
 
-        $tempFilePath = $request->hasFile('file_path')
-            ? $this->hotelService->handleTempUploadedImage($request->file('file_path'))
-            : $request->input('temp_file_path');
+        $newFilePath = $request->input('new_file_path');
+
+        if ($request->hasFile('file_path')) {
+            if ($newFilePath && $newFilePath !== $hotel->file_path) {
+                $this->fileService->deleteImage($newFilePath);
+            }
+            $newFilePath = $this->fileService->handleUploadedImage($request->file('file_path'), 'hotel');
+        }
 
         $hotelName = $request->input('hotel_name');
         $prefectureId = $request->integer('prefecture_id');
 
-        return view('admin.hotel.edit-confirm', compact('hotel', 'prefecture', 'tempFilePath', 'hotelName', 'prefectureId'));
+        return view('admin.hotel.edit-confirm', compact('hotel', 'prefecture', 'newFilePath', 'hotelName', 'prefectureId'));
     }
 
     public function editComplete(CompleteEditHotelRequest $request): View
@@ -82,7 +88,7 @@ class HotelController extends Controller
         $hotel = $this->hotelService->updateHotel(
             $request->integer('hotel_id'),
             $request->validated(),
-            $request->input('temp_file_path'),
+            $request->input('new_file_path'),
         );
 
         return view('admin.hotel.edit-complete', compact('hotel'));
@@ -100,7 +106,7 @@ class HotelController extends Controller
             ->with('success', __('hotel.created_success'));
     }
 
-    public function delete(DeleteHotelRequest $request): RedirectResponse
+    public function delete(Request $request): RedirectResponse
     {
         $this->hotelService->deleteHotel($request->integer('hotel_id'));
 

@@ -17,7 +17,7 @@ class CompleteEditHotelRequest extends FormRequest
             'hotel_id' => ['required', 'integer', 'exists:hotels,hotel_id'],
             'hotel_name' => ['required', 'string', 'max:255'],
             'prefecture_id' => ['required', 'integer', 'exists:prefectures,prefecture_id'],
-            'temp_file_path' => ['nullable', 'string'],
+            'new_file_path' => ['nullable', 'string'],
         ];
     }
 
