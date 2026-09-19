@@ -4,7 +4,6 @@ namespace App\Models;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -27,37 +26,35 @@ class Booking extends Model
         return $this->belongsTo(Hotel::class, 'hotel_id', 'hotel_id');
     }
 
-    public function scopeSearch(
-        Builder $query,
+    /**
+     * @param string|null $customerName
+     * @param string|null $customerContact
+     * @param string|null $checkinTime
+     * @param string|null $checkoutTime
+     * @return array
+     */
+    public function getBookingList(
         ?string $customerName = null,
         ?string $customerContact = null,
         ?string $checkinTime = null,
         ?string $checkoutTime = null
-    ): Builder {
-        return $query->with('hotel')
+    ): array {
+        return $this->with('hotel')
             ->when($customerName, function (Builder $q, string $name): void {
-                $q->where('customer_name', 'LIKE', '%'.addcslashes($name, '%_').'%');
+                $q->where('customer_name', 'LIKE', '%' . addcslashes($name, '%_') . '%');
             })
             ->when($customerContact, function (Builder $q, string $contact): void {
-                $q->where('customer_contact', 'LIKE', '%'.addcslashes($contact, '%_').'%');
+                $q->where('customer_contact', 'LIKE', '%' . addcslashes($contact, '%_') . '%');
             })
             ->when($checkinTime, function (Builder $q, string $checkin): void {
                 $q->where('checkin_time', '>=', $checkin);
             })
             ->when($checkoutTime, function (Builder $q, string $checkout): void {
                 $q->where('checkout_time', '<=', $checkout);
-            });
-    }
-
-    public function getBookingList(
-        ?string $customerName = null,
-        ?string $customerContact = null,
-        ?string $checkinTime = null,
-        ?string $checkoutTime = null
-    ): Collection {
-        return $this->search($customerName, $customerContact, $checkinTime, $checkoutTime)
+            })
             ->latest('booking_id')
-            ->get();
+            ->get()
+            ->toArray();
     }
 
     protected function serializeDate(DateTimeInterface $date): string
