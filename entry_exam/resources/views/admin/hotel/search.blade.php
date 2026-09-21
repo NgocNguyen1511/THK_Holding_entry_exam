@@ -19,8 +19,10 @@
                 <select name="prefecture_id">
                     <option value="">全て</option>
                     @foreach($prefectures ?? [] as $prefecture)
+                    @if(is_object($prefecture))
                         <option value="{{ $prefecture->prefecture_id }}" {{ request('prefecture_id') == $prefecture->prefecture_id ? 'selected' : '' }}>{{ $prefecture->prefecture_name }} ({{ ucwords($prefecture->prefecture_name_alpha) }})</option>
-                    @endforeach
+                    @endif
+                        @endforeach
                 </select>
                 <button type="submit">検索</button>
                 @error('hotel_name')

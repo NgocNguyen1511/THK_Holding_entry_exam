@@ -3,37 +3,43 @@
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class FileService
 {
-    public function handleUploadedImage(?UploadedFile $file, string $directory = 'hotel'): ?string
+    /**
+     * @param UploadedFile|null $file
+     * @param string $directory
+     * @return string|null
+     */
+    public function upload(?UploadedFile $file, string $directory): ?string
     {
         if (! $file) {
             return null;
         }
 
-        $fileName = time().'_'.$file->getClientOriginalName();
-        $targetDir = public_path('assets/img/'.$directory);
-
-        if (! file_exists($targetDir)) {
-            mkdir($targetDir, 0755, true);
-        }
-
-        $file->move($targetDir, $fileName);
-
-        return $directory.'/'.$fileName;
+        return $file->store($directory, 'assets');
     }
 
-    public function deleteImage(?string $filePath): void
+    /**
+     * @param string|null $filePath
+     * @return bool
+     */
+    public function delete(?string $filePath): bool
     {
         if (! $filePath) {
-            return;
+            return false;
         }
 
-        $imageFullPath = public_path('assets/img/'.$filePath);
-
-        if (file_exists($imageFullPath)) {
-            @unlink($imageFullPath);
+        if (Storage::disk('assets')->exists($filePath)) {
+            return Storage::disk('assets')->delete($filePath);
         }
+
+        return false;
+    }
+
+    public function exists(?string $filePath): bool
+    {
+        return $filePath ? Storage::disk('assets')->exists($filePath) : false;
     }
 }
