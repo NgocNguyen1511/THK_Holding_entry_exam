@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Hotel;
+use App\Models\Prefecture;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 
 class HotelService
 {
@@ -14,7 +16,7 @@ class HotelService
 
     public function createHotel(array $attributes, ?UploadedFile $file = null): Hotel
     {
-        $filePath = $this->fileService->handleUploadedImage($file, 'hotel');
+        $filePath = $this->fileService->upload($file, 'img/hotel');
 
         return $this->hotel->create([
             'hotel_name' => $attributes['hotel_name'],
@@ -23,22 +25,20 @@ class HotelService
         ]);
     }
 
-    public function updateHotel(int $hotelId, array $attributes, ?string $newFilePath = null): Hotel
+    public function updateHotel(int $hotelId, array $attributes): Hotel
     {
         $hotel = $this->hotel->findOrFail($hotelId);
-
         $filePath = $hotel->file_path;
 
-        if ($newFilePath && $newFilePath !== $hotel->file_path && file_exists(public_path('assets/img/'.$newFilePath))) {
-            $this->fileService->deleteImage($hotel->file_path);
-            $filePath = $newFilePath;
+        if (($isNew = isset($attributes['file_path']) && $attributes['file_path'] instanceof UploadedFile) || (array_key_exists('file_path', $attributes) && empty($attributes['file_path']))) {
+            $hotel->file_path && $this->fileService->delete('img/' . $hotel->file_path);
+            $filePath = $isNew ? str_replace('img/', '', $this->fileService->upload($attributes['file_path'], 'img/hotel')) : null;
         }
 
         $hotel->update([
             'hotel_name' => $attributes['hotel_name'],
             'prefecture_id' => $attributes['prefecture_id'],
             'file_path' => $filePath,
-            'updated_at' => now(),
         ]);
 
         return $hotel;
@@ -48,11 +48,11 @@ class HotelService
     {
         $hotel = $this->hotel->find($hotelId);
 
-        if (! $hotel) {
+        if (!$hotel) {
             return false;
         }
 
-        $this->fileService->deleteImage($hotel->file_path);
+        $this->fileService->delete('img/' . $hotel->file_path);
 
         return (bool) $hotel->delete();
     }

@@ -13,11 +13,18 @@ class UpsertHotelRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'hotel_name' => ['required', 'string', 'max:255'],
             'prefecture_id' => ['required', 'integer', 'exists:prefectures,prefecture_id'],
-            'file_path' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
+
+        if (request()->hasFile('file_path')) {
+            $rules['file_path'] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'];
+        } else {
+            $rules['file_path'] = ['nullable', 'string'];
+        }
+
+        return $rules;
     }
 
     public function messages(): array

@@ -1,7 +1,5 @@
 .search-result {
     padding-left: 320px;
-    padding-right: 16px;
-    overflow-x: auto;
 }
 table.shopsearchlist_table {
     border-left: 1px solid #000;
@@ -9,7 +7,6 @@ table.shopsearchlist_table {
     table-layout: fixed;
     background-color: #ffffff;
     font-size: 13px;
-    max-width: 100%;
 }
 
 #shop_name {
@@ -27,16 +24,11 @@ h3.search-result-title {
 @media (max-width: 768px) {
     .search-result {
         padding-left: 16px;
-        padding-right: 16px;
+        overflow-x: auto;
         box-sizing: border-box;
-        width: 100%;
     }
 
     table.shopsearchlist_table {
         min-width: 640px;
-    }
-
-    h3.search-result-title {
-        font-size: 20px;
     }
 }

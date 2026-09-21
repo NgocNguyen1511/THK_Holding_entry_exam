@@ -28,10 +28,13 @@
                     <select id="prefecture_id" name="prefecture_id">
                         <option value="">-- 都道府県 --</option>
                         @foreach ($prefectures ?? [] as $prefecture)
-                            <option value="{{ $prefecture->prefecture_id }}"
-                                {{ old('prefecture_id') == $prefecture->prefecture_id ? 'selected' : '' }}>
-                                {{ $prefecture->prefecture_name }} ({{ ucwords($prefecture->prefecture_name_alpha) }})
-                            </option>
+                            @if (is_object($prefecture))
+                                <option value="{{ $prefecture->prefecture_id }}"
+                                    {{ old('prefecture_id') == $prefecture->prefecture_id ? 'selected' : '' }}>
+                                    {{ $prefecture->prefecture_name }}
+                                    ({{ ucwords($prefecture->prefecture_name_alpha ?? '') }})
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                     @error('prefecture_id')
@@ -47,9 +50,22 @@
                     </div>
 
                     <div class="file-input-wrapper">
-                        <input type="file" id="file_path" name="file_path"
+                        <img id="img-preview"
+                            style="width: 100px; height: 100px; object-fit: cover; display: none; margin-bottom: 8px;" />
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" style="cursor: pointer;"
+                                onclick="document.getElementById('file_path').click()">
+                                画像をアップロード
+                            </button>
+
+                            <button type="button" id="btn_delete_img" style="cursor: pointer; color: red; display: none;"
+                                onclick="deleteFile()">
+                                画像を削除
+                            </button>
+                        </div>
+                        <input type="file" id="file_path" name="file_path" onchange="loadFile(event)"
                             class="form-control file-control @error('file_path') is-invalid @enderror"
-                            accept="image/jpeg,image/png,image/jpg,image/webp">
+                            accept="image/jpeg,image/png,image/jpg,image/webp" style="display: none;">
                         <div class="file-hint">対応フォーマット：JPEG、PNG、JPG、WEBP（最大2MB）</div>
                     </div>
                     @error('file_path')
@@ -72,4 +88,27 @@
             alert(@json(session('success')));
         </script>
     @endif
+
+    <script>
+        const fileInput = document.getElementById('file_path');
+        const output = document.getElementById('img-preview');
+        const btnDelete = document.getElementById('btn_delete_img');
+
+        const loadFile = (event) => {
+            const output = document.getElementById('img-preview');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+                URL.revokeObjectURL(output.src)
+            }
+            output.style.display = 'block';
+            btnDelete.style.display = 'inline-block';
+        }
+
+        const deleteFile = () => {
+            fileInput.value = '';
+            output.removeAttribute('src');
+            output.style.display = 'none';
+            btnDelete.style.display = 'none';
+        }
+    </script>
 @endsection

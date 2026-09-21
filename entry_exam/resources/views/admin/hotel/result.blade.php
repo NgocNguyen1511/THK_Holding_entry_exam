@@ -23,10 +23,11 @@
                             <td class="btn_center" id="edit"></td>
                             <td class="btn_center" id="delete"></td>
                         </tr>
-                        @foreach($hotelList as $hotel)
+                        @foreach ($hotelList as $hotel)
                             <tr style="background-color:#BDF1FF">
                                 <td>
-                                    <a href="{{ route('hotelDetail', ['hotel_id' => $hotel['hotel_id']]) }}" target="_blank">{{ $hotel['hotel_name'] }}</a>
+                                    <a href="{{ route('hotelDetail', ['hotel_id' => $hotel['hotel_id']]) }}"
+                                        target="_blank">{{ $hotel['hotel_name'] }}</a>
                                 </td>
                                 <td>
                                     {{ $hotel['prefecture']['prefecture_name'] }}
@@ -38,14 +39,14 @@
                                     {{ (string) $hotel['updated_at'] }}
                                 </td>
                                 <td>
-                                    <form action="{{ route('adminHotelEditPage') }}" method="get">
-                                        @csrf
-                                        <input type="hidden" name="hotel_id" value="{{ $hotel['hotel_id'] }}">
+                                    <form action="{{ route('adminHotelEditPage', ['hotel_id' => $hotel['hotel_id']]) }}"
+                                        method="get">
                                         <button type="submit">編集</button>
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="{{ route('adminHotelDeleteProcess') }}" method="post" onsubmit="return confirm('本当にこのホテル情報を削除しますか？\n(Are you sure you want to delete this hotel?)');">
+                                    <form action="{{ route('adminHotelDeleteProcess') }}" method="post"
+                                        onsubmit="return confirm('本当にこのホテル情報を削除しますか？\n(Are you sure you want to delete this hotel?)');">
                                         @csrf
                                         <input type="hidden" name="hotel_id" value="{{ $hotel['hotel_id'] }}">
                                         <button type="submit">削除</button>
